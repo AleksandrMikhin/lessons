@@ -1,4 +1,4 @@
-public class Task52 {
+public class Task5_2 {
     public static void main(String[] args) {
         int summ = 1000, percent = 5, years = 1;
         double k;
