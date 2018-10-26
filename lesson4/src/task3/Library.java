@@ -15,9 +15,9 @@ public class Library {
     }
 
     int findBook(Book book){
-        for (int i = 0; i < books.length; i++){
-            if (books[i].getBook() == book)
-                return i;
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] == null) continue;
+            if (books[i].getBook() == book) return i;
         }
         return -1;
     }
@@ -28,10 +28,9 @@ public class Library {
             books[find].addCount(quantity);
         }else{
             for (int i = 0; i < books.length; i++){
-                if (books[i].getBook() == null) continue;
+                if (books[i] != null) continue;
                 else{
-                    books[i].setBook(book);
-                    books[i].addCount(quantity);
+                    books[i] = new BookInLibrary(book, quantity);
                     return;
                 }
             }

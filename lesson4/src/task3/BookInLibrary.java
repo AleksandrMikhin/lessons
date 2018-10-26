@@ -7,20 +7,17 @@ public class BookInLibrary {
 
     @Override
     public String toString() {
-        return book.name + ": " + count;
-    }
-
-    public Book getBook() {
-        return book;
+        return book.name + ": " + (count + 1);
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public Book getBook() {
+        return book;
     }
+
 
     public void addCount(int count) {
         this.count += count;
