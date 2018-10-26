@@ -12,12 +12,10 @@ public class Task3 {
         Library lib = new Library(count);
 
         System.out.println("Заполните книги и их количество: ");
-        String tempStr;
         for (int i = 0; i < count; i++){
             System.out.println("название книги №" + (i + 1) + ": ");
 
-            tempStr = in.nextLine().toString();
-            Book book = new Book(tempStr);
+            Book book = new Book(in.nextLine());
             System.out.print("количество: ");
             lib.put(book, in.nextInt());
         }
