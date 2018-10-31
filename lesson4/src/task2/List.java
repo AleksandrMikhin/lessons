@@ -14,7 +14,7 @@ public class List {
 
     public void addNode(int value) {
         Node tempNode = firstNode;
-        for (int i = 0; i<length; i++) tempNode = tempNode.nextNode;
+        for (int i = 1; i<length; i++) tempNode = tempNode.nextNode;
         tempNode.nextNode = new Node(value);
         length++;
     }
@@ -24,7 +24,7 @@ public class List {
         Node tempNode = firstNode;
 
         if ((length < number) || (length == 1)){
-            System.out.println("Невозможно удалить единственный элемент либо его номер больше, чем дляны списка");
+            System.out.println("Невозможно удалить единственный элемент либо его номер больше, чем длина списка");
         }else{
             if (number == 1) firstNode = firstNode.nextNode;
             else{
