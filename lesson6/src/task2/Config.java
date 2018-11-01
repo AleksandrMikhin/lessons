@@ -1,6 +1,7 @@
 package task2;
 
-public class Config {
+public abstract class Config
+        implements IConfig {
     KeyVolume[] keysVolume;
 
 }
