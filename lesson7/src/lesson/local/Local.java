@@ -1,4 +1,4 @@
-package lesson7.local;
+package lesson.local;
 
 public class Local {
     public static void main(String[] args) {

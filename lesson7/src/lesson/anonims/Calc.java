@@ -1,4 +1,4 @@
-package lesson7.anonims;
+package lesson.anonims;
 
 public class Calc {
     int a;

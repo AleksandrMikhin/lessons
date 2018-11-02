@@ -1,4 +1,4 @@
-package lesson7.memberinner;
+package lesson.memberinner;
 
 public class OuterClass {
     String value;

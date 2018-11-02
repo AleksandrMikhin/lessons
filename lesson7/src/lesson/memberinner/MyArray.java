@@ -1,6 +1,4 @@
-package lesson7.memberinner;
-
-import org.omg.PortableServer.POAPackage.ObjectAlreadyActive;
+package lesson.memberinner;
 
 import java.util.Iterator;
 
@@ -15,7 +13,7 @@ public class MyArray {
     }
 
     public Iterator evenIterator(){
-      return new EvenItarator
+      return new EvenItarator();
     };
 
     private class EvenItarator implements Iterator {
