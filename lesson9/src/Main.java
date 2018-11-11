@@ -55,6 +55,10 @@ public class Main {
 
 //        Book b = storage.get(0); при этом получить данные из storsge не можем
         Object b = storage.get(0); //только так, но не сохраняются методы
+
+
+    //Integer
+    //Long
     }
 
 //    int / long - обертки
