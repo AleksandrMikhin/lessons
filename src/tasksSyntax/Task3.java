@@ -14,17 +14,23 @@ package tasksSyntax;
 //        В классе реализовать счетчик создаваемых объектов и метод  int getDogCount(), который возвращает количество созданных объектов класса
 
 class Dog {
-    String name, color, adds;
-    int age, weigth;
+
+    String name;
+    int weigth;
+    int age;
+    String color;
+    String adds;
     private boolean home;
+    private static int count = 0;
 
     public Dog(String name) {
         this.name = name;
         this.color = "Серый";
-        this.adds = "скрывает";
+        this.adds = "Cкрывает";
         this.age = 1;
         this.weigth = 10;
         this.home = true;
+        count++;
     }
 
     public Dog(String name, int age, int weigth) {
@@ -34,6 +40,7 @@ class Dog {
         this.age = (age < 1)? 1: age;
         this.weigth = (weigth < 1)? 1: weigth;
         this.home = true;
+        count++;
     }
 
     public Dog(String name, int age) {
@@ -43,24 +50,31 @@ class Dog {
         this.age = (age < 1)? 1: age;
         this.weigth = 10;
         this.home = true;
+        count++;
     }
 
     public Dog(int weigth, String color) {
-        this.name = "бездомный";
+        this.name = "Неизвесно";
         this.color = color;
         this.adds = "";
         this.age = 2;
         this.weigth = weigth;
         this.home = false;
+        count++;
     }
 
     public Dog(int weigth, String color, String adds) {
-        this.name = "неизвесно";
+        this.name = "Неизвесно";
         this.color = "Серый";
         this.adds = adds;
         this.age = 2;
         this.weigth = weigth;
         this.home = true;
+        count++;
+    }
+
+    static int getDogCount(){
+        return count;
     }
 
     @Override
@@ -80,7 +94,21 @@ class Dog {
 public class Task3 {
     public static void main(String[] args) {
         Dog dog1 = new Dog("bobik", 5, 10);
+        Dog dog2 = new Dog(7, "gray");
+
+        Dog dog3 = new Dog("bobik", 5, 10){
+            @Override
+            public String toString() {
+                return this.getClass().getName() + ":::" + super.toString();
+            }
+        };
+
         System.out.println(dog1);
+        System.out.println(dog2);
+        System.out.println("Count: " + Dog.getDogCount());
+        System.out.println(dog2.getClass().getName());
+        System.out.println(dog3);
+
     }
 
 }
