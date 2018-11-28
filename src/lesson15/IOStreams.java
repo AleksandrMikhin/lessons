@@ -16,6 +16,8 @@ public class IOStreams {
     //    InputStream   работают с байтами
     //    OutputStream
 
+
+
     protected static long readByte(File file) throws IOException {
 
         long byteSum = 0;
