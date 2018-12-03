@@ -170,7 +170,7 @@ public class IOStreams {
 
 
         IOStreams ioStreams = new IOStreams();
-        //чтение из фойла по байту
+        //чтение из файла по байту
         File file = new File("file.txt");
         File file2 = new File("file2.txt");
         System.out.println(readByte(file));
