@@ -12,13 +12,17 @@ public class Client {
 
         try (Socket socket = new Socket("localhost", 8080)) {
             IOConnection ioConnection = new IOConnection(socket);
+            Message inMessage;
 
             while (true) {
                 ConsoleHelper.writeString(name + " > ");
                 String str = ConsoleHelper.readString();
                 if (str.equals("q")) break;
-                Message msg = new Message(name, str);
-                ioConnection.send(msg);
+
+                ioConnection.send(new Message(name, str));
+                if ((inMessage = ioConnection.receive()) != null) {
+                    ConsoleHelper.writeString(inMessage + "\n");
+                }
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();

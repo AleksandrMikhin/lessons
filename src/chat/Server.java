@@ -3,6 +3,12 @@ package chat;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
+
+//Сервер принимает сообщение от клиента и отправляем ему сообщение
+//  - объект класса Message, где sender="Server",
+//  текст сообщения может быть любыми.
+
 
 public class Server {
     private int port;
@@ -19,10 +25,13 @@ public class Server {
             IOConnection ioConnection = new IOConnection(socket);
             ConsoleHelper.writeString("Server started on: " + serverSocket + "\n");
 
+            Message inMessage;
             while (true) {
-                ConsoleHelper.writeString(ioConnection.receive() + "\n");
+                if ((inMessage = ioConnection.receive()) != null) {
+                   ConsoleHelper.writeString(inMessage + "\n");
+                   ioConnection.send(new Message("Server", new Date().toString()));
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,5 +41,4 @@ public class Server {
         Server server = new Server(8080);
         server.start();
     }
-
  }

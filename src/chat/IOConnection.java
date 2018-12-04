@@ -1,11 +1,11 @@
 package chat;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
-
 
 //IOConnection – класс соединения между клиентом и сервером
 //    Класс Connection должен быть оберткой над классом java.net.Socket, которая должна
@@ -33,10 +33,8 @@ public class IOConnection {
             out.writeObject(message);
             out.flush();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
     }
 
 
@@ -45,12 +43,10 @@ public class IOConnection {
 
         try {
             message = (Message) in.readObject();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+        } catch (EOFException e){
+            System.out.println("Соединение разорвано. Печаль(:");
+        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
         }
         return message;
     }

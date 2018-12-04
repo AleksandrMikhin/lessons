@@ -29,6 +29,6 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "message: " + messText + " from " + sender;
+        return sender + ": " + messText;
     }
 }
