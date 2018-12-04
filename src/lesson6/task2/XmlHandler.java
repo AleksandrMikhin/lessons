@@ -8,7 +8,7 @@ public class XmlHandler extends Config {
 
     @Override
     public void changeKey() {
-        System.out.println("Исменяем ключ в XML-файле");
+        System.out.println("Изменяем ключ в XML-файле");
     }
 
     @Override

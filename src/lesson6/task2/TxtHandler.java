@@ -8,7 +8,7 @@ public class TxtHandler extends Config {
 
     @Override
     public void changeKey() {
-        System.out.println("Исменяем ключ в TXT-файле");
+        System.out.println("Изменяем ключ в TXT-файле");
     }
 
     @Override
