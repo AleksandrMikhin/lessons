@@ -44,7 +44,7 @@ public class PrintServer {
     }
 
     public static void main(String[] args) {
-        int port = Integer.parseInt(args[0]);
+        int port = 8080;
         PrintServer server = new PrintServer(port);
         server.start();
 

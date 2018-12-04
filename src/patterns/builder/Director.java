@@ -4,11 +4,20 @@ public class Director {
 
     private ComputerBuilder computerBuilder;
 
-    public void setComputerBuilder(ComputerBuilder cb){
-        this.computerBuilder = cb;
+    public void setComputerBuilder(
+            ComputerBuilder computerBuilder){
+        this.computerBuilder = computerBuilder;
     }
 
-    public ComputerBuilder getComputer() {
+    public Computer getComputer(){
         return computerBuilder.getComputer();
     }
+
+    public void constructComputer(){
+        computerBuilder.createComputer();
+        computerBuilder.buildDisplay();
+        computerBuilder.buildManipulators();
+        computerBuilder.buildSystemBlock();
+    }
+
 }

@@ -4,11 +4,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketAddress;
+
+
+//IOConnection – класс соединения между клиентом и сервером
+//    Класс Connection должен быть оберткой над классом java.net.Socket, которая должна
+//    будет уметь сериализовать и десериализовать объекты типа Message в сокет.
 
 public class IOConnection {
-    Socket socket;
-    ObjectOutputStream out;
-    ObjectInputStream in;
+    private Socket socket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     public IOConnection(Socket socket) {
         this.socket = socket;
@@ -16,8 +22,40 @@ public class IOConnection {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void send(Message message) {
+
+        try {
+            out.writeObject(message);
+            out.flush();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
+    }
+
+
+    public Message receive() {
+        Message message = null;
+
+        try {
+            message = (Message) in.readObject();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+        public SocketAddress getRemoteSocketAddress() {
+            return socket.getRemoteSocketAddress();
     }
 }

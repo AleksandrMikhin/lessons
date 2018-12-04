@@ -23,16 +23,13 @@ public class Computer {
         this.manipulators = manipulators;
     }
 
-    public String getDisplay() {
-        return display;
+    @Override
+    public String toString() {
+        return "Computer{" +
+                "display='" + display + '\'' +
+                ", systemBlock='" + systemBlock + '\'' +
+                ", manipulators='" + manipulators + '\'' +
+                '}';
     }
 
-    public String getSystemBlock() {
-        return systemBlock;
-    }
-
-    public String getManipulators() {
-        return manipulators;
-    }
 }
-

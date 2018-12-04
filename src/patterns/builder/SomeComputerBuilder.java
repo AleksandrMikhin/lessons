@@ -9,16 +9,15 @@ public class SomeComputerBuilder extends ComputerBuilder {
     @Override
     public void buildDisplay() {
         computer.setDisplay("some display");
-
     }
 
     @Override
     public void buildSystemBlock() {
-        computer.setSystemBlock("some");
+        computer.setSystemBlock("some system block");
     }
 
     @Override
     public void buildManipulators() {
-        computer.setManipulators("some");
+        computer.setManipulators("some manipulators");
     }
 }
