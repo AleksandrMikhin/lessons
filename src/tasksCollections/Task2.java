@@ -1,4 +1,4 @@
-package taskCollections;
+package tasksCollections;
 
 //    Написать программу со следующим функционалом:
 //    Считывание 20 чисел с клавиатуры,

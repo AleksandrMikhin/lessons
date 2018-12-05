@@ -1,4 +1,4 @@
-package taskCollections;
+package tasksCollections;
 
 //    Написать программу, которая должна:
 //    Считывать с клавиатуры 10 слов в список строк.
@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class Task5 {
 
-    public static Boolean sorted(ArrayList<String> arrayList) {
+    public static boolean sorted(ArrayList<String> arrayList) {
 
         for (int i = 0; i < arrayList.size()-1; i++) {
             if (arrayList.get(i).length() > arrayList.get(i+1).length()) {

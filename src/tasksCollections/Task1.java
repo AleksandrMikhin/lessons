@@ -1,4 +1,4 @@
-package taskCollections;
+package tasksCollections;
 
 //    Написать программу со следующим функционалом:
 //    Считывание максимум 5 строк с клавиатуры,

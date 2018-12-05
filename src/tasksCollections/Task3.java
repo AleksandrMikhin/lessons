@@ -1,4 +1,4 @@
-package taskCollections;
+package tasksCollections;
 
 //    Написать программу со следующим функционалом:
 //    Считывание  с клавиатуры 10 слов в список строк.
