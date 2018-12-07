@@ -2,9 +2,6 @@ package patterns.decorator;
 
 public class TO implements IService {
 
-
-
-
     @Override
     public double getPrice() {
         return 3000;

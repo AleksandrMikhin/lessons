@@ -8,15 +8,23 @@ public class ExitCommand extends Command {
 
     @Override
     String name() {
-        return "ExitCommand";
+        return "Exit command";
     }
 
     @Override
     boolean execute() {
-//        processor. - методы доступны
-        return false;  //реализация - храним историю выполнения команд, для этого ответ
-    }
 
-//  команды repeat, cancel, exit
+        System.out.println("-------------- Введенный текст --------------");
+        for (int i = 0; i < processor.sizeStorage(); i++) {
+            System.out.println(processor.get(i));
+        }
+        System.out.println("\n--- Введенные команды начиная с последней---");
+
+        while (!processor.isEmptyCommand()) {
+            System.out.println(processor.delCommand().name());
+        }
+
+        return true;
+    }
 
 }

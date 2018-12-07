@@ -9,8 +9,12 @@ public class CommandsHistory {
         history.push(command);
     }
 
-    public void delCommand() {
-        history.pop();
+    public Command delCommand() {
+        return history.pop();
+    }
+
+    public Command lastCommand() {
+        return history.peek();
     }
 
     public boolean isEmpty() {

@@ -8,14 +8,17 @@ public class RepeatCommand extends Command {
 
     @Override
     String name() {
-        return "RepeatCommand";
+        return "Repeat command";
     }
 
     @Override
     boolean execute() {
-//        processor. - методы доступны
-        return false;  //реализация - храним историю выполнения команд, для этого ответ
+        if (processor.sizeStorage() > 0) {
+            processor.addString(
+                    processor.get(processor.sizeStorage() - 1));
+            return true;
+        }
+        return false;
     }
-
 
 }

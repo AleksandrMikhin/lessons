@@ -8,15 +8,17 @@ public class CancelCommand extends Command {
 
     @Override
     String name() {
-        return "CancelCommand";
+        return "Cancel command";
     }
 
     @Override
     boolean execute() {
-//        processor. - методы доступны
-        return false;  //реализация - храним историю выполнения команд, для этого ответ
-    }
 
-//  команды repeat, cancel, exit
+        if (processor.lastCommand() != processor.CANCEL) {
+            processor.delCommand();
+            return true;
+        }
+        return false;
+    }
 
 }

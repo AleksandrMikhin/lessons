@@ -8,15 +8,18 @@ public class ProcessCommand extends Command {
 
     @Override
     String name() {
-        return "ProcessCommand";
+        return "Process command";
     }
 
     @Override
     boolean execute() {
 //        processor. - методы доступны
+
+        if (processor.lengthBuffer() > 0) {
+            processor.add();
+            return true;
+        }
         return false;  //реализация - храним историю выполнения команд, для этого ответ
     }
-
-//  команды repeat, cancel, exit
 
 }
