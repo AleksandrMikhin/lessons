@@ -11,21 +11,24 @@ public class Task1 {
 
     public static void main(String[] args) {
 
-        File file = new File("file.txt");
-        File file2 = new File("file2.txt");
-        int lengthDel = 4;
+        int lengthMin = 4;
+        int lengthMax = 6;
 
-        try (Scanner in = new Scanner(file);
-             OutputStream out = new FileOutputStream(file2)) {
+        String fileName = "file.txt";
+        String newDir = "toFileTxtDir";
+
+        File fileOut = new File(newDir);
+        fileOut.mkdir();
+        fileOut = new File(newDir, fileName);
+
+        try (Scanner in = new Scanner(new File(fileName));
+             OutputStream out = new FileOutputStream(fileOut)) {
 
             while(in.hasNext()){
-                String[] arr = in.nextLine().split(" ");
-
-                StringBuilder tempStr = new StringBuilder();
-                for (String s: arr) {
-                    if (s.length() != lengthDel) tempStr.append(s).append(" ");
-                }
-                if (tempStr.length() > 0) out.write( tempStr.append("\n").toString().getBytes() );
+                String str = in.nextLine();
+//                System.out.println(str);
+//                System.out.println(str.replaceAll("\\b[A-Za-zА-Яа-яЁё]{" + lengthMin + "," + lengthMax + "}\\b", ""));
+                out.write((str.replaceAll("\\b[A-Za-zА-Яа-яЁё]{" + lengthMin + "," + lengthMax + "}\\b", "") + "\n").getBytes() );
             }
 
         } catch (FileNotFoundException e) {
@@ -33,10 +36,7 @@ public class Task1 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ;
 
     }
-
-
 
 }
