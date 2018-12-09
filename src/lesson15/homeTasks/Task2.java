@@ -72,7 +72,7 @@ public class Task2 {
 //        System.out.print("Введите размер куска: ");
 //        int sizePart = scanner.nextInt();
 
-//        System.out.println(toSplit("file.txt", 50));
+        System.out.println(toSplit("file.txt", 50));
         glue("file.txt");
     }
 }

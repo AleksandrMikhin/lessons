@@ -38,14 +38,11 @@ public class CryptoInputStream extends FilterInputStream {
     @Override
     public int read(byte[] b, int off, int len) throws IOException{
         int res = super.read(b, off, len);
-        System.out.println(res + " jbbgbkbikbjkjklk");
 
         if (res >= 0) {
             for (int i = 0; i < res; i++) {
                 readByte++;
-                System.out.print(b[i - off] + " :");
                 b[i - off] ^= passArray[(int) (readByte % passArray.length)];
-                System.out.println( passArray[(int) (readByte % passArray.length)] + ": "+ b[i - off]);
             }
         }
         return res;

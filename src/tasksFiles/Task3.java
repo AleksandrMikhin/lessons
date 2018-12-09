@@ -9,6 +9,9 @@ public class Task3 {
 
     public static void main(String[] args) {
 
+//        String copyFrom = args[0];
+//        String copyTo = args[1];
+
         String copyFrom = "c:\\1\\";
         String copyTo = "c:\\2\\";
 

@@ -39,7 +39,7 @@ public class Main {
             in.close();
             out.flush();
             out.close();
-            System.out.println("Произведен XOR файла: " + fileName);
+            System.out.println("Произведен XOR: " + fileName + " -> " + fileName2);
 
         } catch (IOException e) {
             e.printStackTrace();

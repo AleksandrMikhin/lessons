@@ -26,8 +26,6 @@ public class Task1 {
 
             while(in.hasNext()){
                 String str = in.nextLine();
-//                System.out.println(str);
-//                System.out.println(str.replaceAll("\\b[A-Za-zА-Яа-яЁё]{" + lengthMin + "," + lengthMax + "}\\b", ""));
                 out.write((str.replaceAll("\\b[A-Za-zА-Яа-яЁё]{" + lengthMin + "," + lengthMax + "}\\b", "") + "\n").getBytes() );
             }
 
