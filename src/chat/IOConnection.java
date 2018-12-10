@@ -1,9 +1,6 @@
 package chat;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketAddress;
 
@@ -11,12 +8,18 @@ import java.net.SocketAddress;
 //    Класс Connection должен быть оберткой над классом java.net.Socket, которая должна
 //    будет уметь сериализовать и десериализовать объекты типа Message в сокет.
 
-public class IOConnection {
+public class IOConnection implements Closeable {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    public IOConnection(Socket socket) {
+    @Override
+    public void close() throws IOException {    // для автозакрытия в try
+        in.close();                             // классу implements Closeable
+        out.close();                            // + метод close()
+    }
+
+    public IOConnection(Socket socket){
         this.socket = socket;
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
