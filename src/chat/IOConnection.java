@@ -25,33 +25,20 @@ public class IOConnection implements Closeable {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public void send(Message message) {
+    public void send(Message message) throws IOException {
 
-        try {
             out.writeObject(message);
             out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
-    public Message receive() {
-        Message message = null;
+    public Message receive() throws IOException, ClassNotFoundException {
 
-        try {
-            message = (Message) in.readObject();
-        } catch (EOFException e){
-            System.out.println("Соединение разорвано. Печаль(:");
-        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-        }
-        return message;
+        return (Message) in.readObject();
     }
 
         public SocketAddress getRemoteSocketAddress() {
