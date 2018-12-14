@@ -25,48 +25,58 @@ public class Server {
                 while (true) {
                     try (Socket socket = serverSocket.accept();
                          ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                         ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+                         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+                    {
+                        boolean flag = true;
+                        while (flag) {
 
-                        Message message = new Message();
-                        message.readExternal(in);
-                        if (!message.getMessText().equals("/connect")) break;
-                        String currentUser = message.getSender();
+                            Object obj = in.readObject();
+                            if (obj instanceof Command) {
 
-                        if (!listUsers.contains(currentUser)) listUsers.add(currentUser);
+                                Command command = (Command) obj;
+                                String currentUser = command.getSender();
 
-                        while (!message.getMessText().trim().equals("/exit")) {
+                                switch (command.getCommand()) {
+                                    case "/connect": {
+                                        if (!listUsers.contains(currentUser)) listUsers.add(currentUser);
+                                        System.out.println(currentUser + " connected");
+                                        break;
+                                    }
 
-                            switch (message.getMessText().trim()) {
-                                case "/connect": {
-                                    System.out.println(currentUser + " connected");
-                                    break;
+                                    case "/exit": {
+                                        flag = false;
+                                        break;
+                                    }
+
+                                    case "/list_users": {
+                                        out.writeObject(new Message("server", Arrays.toString(listUsers.toArray())));
+                                        out.flush();
+                                        break;
+                                    }
+                                    case "/ping": {
+                                        out.writeObject(new Message("server", "/pingReply"));
+                                        out.flush();
+                                        break;
+                                    }
+                                    case "/server_time": {
+                                        out.writeObject(new Message("server", new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").
+                                                format(new Date())));
+                                        out.flush();
+                                        break;
+                                    }
                                 }
-                                case "/list_users": {
-                                    new Message("server", Arrays.toString(listUsers.toArray())).writeExternal(out);
-                                    out.flush();
-                                    break;
-                                }
-                                case "/ping": {
-                                    new Message("server", "/pingReply").writeExternal(out);
-                                    out.flush();
-                                    break;
-                                }
-                                case "/server_time": {
-                                    new Message("server", new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").
-                                            format(new Date())).writeExternal(out);
-                                    out.flush();
-                                    break;
-                                }
-                                default: {                                              //не понятно - почему сюда не заходит, если нет совпадений?
-                                    System.out.println(message.toString() + "\n");
-                                    break;
-                                }
+
+                            } else {
+                                Message message = (Message) obj;
+                                System.out.println(message.toString() + "\n");
                             }
-                            message.readExternal(in);
                         }
-                    } catch (IOException e) {
-//                            e.printStackTrace();
                         System.out.println("user has disconnected");
+
+                    } catch (IOException e) {
+                        System.out.println("user has disconnected");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
             } catch (IOException e) {

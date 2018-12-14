@@ -17,46 +17,55 @@ public class Client {
 
         try (Socket socket = new Socket("localhost", port)) {
 
-
             try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                  ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
 
-                Message message = new Message(name, "/connect");
-                message.writeExternal(out);
+                out.writeObject(new Command(name, "/connect"));
                 out.flush();
 
                 String mess;
                 while (true) {
                     System.out.print(name + "> ");
-                    mess = scanner.nextLine();
-                    message.setMessText(mess);
+                    mess = scanner.nextLine().trim();
 
                     switch (mess) {
-                        case "/exit": return;
+                        case "/exit": {
+                            out.writeObject(new Command(name, mess));
+                            out.flush();
+                            return;
+                        }
+
                         case "/ping": {
                             Date date = new Date();
-                            message.writeExternal(out);
+                            out.writeObject(new Command(name, mess));
                             out.flush();
-                            message.readExternal(in);
+
+                            in.readObject();
                             System.out.println("ping reply " + (new Date().getTime() - date.getTime()) + "ms.");
                             break;
                         }
                         case "/list_users":
                         case "/server_time": {
-                            message.writeExternal(out);
+                            out.writeObject(new Command(name, mess));
                             out.flush();
-                            message.readExternal(in);
+                            Message message = (Message) in.readObject();
                             System.out.println(message);
+                            break;
                         }
+                        default:
+                            out.writeObject(new Message(name, mess));
+                            out.flush();
                     }
                 }
 
             } catch (IOException e) {
                 System.out.println("no connect");
                 return;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         } catch (IOException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
