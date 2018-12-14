@@ -16,6 +16,11 @@ public class Lesson21 {
 
         //запускаем потоки
         for (Sync.Adder adder: adderList) {
+            adder.start();
+        }
+
+        // ждем завершения
+        for (Sync.Adder adder: adderList) {
             adder.join();
         }
 
@@ -118,18 +123,24 @@ class Get implements Runnable{
 class Library{
 
     public static void main(String[] args) {
-//        Storage storage = new Storage();
-//        new Thread (new Put(storage)).start();
-//        new Thread (new Get(storage)).start();
-//
-        Object obj1 = new Object();
-        Object obj2 = new Object();
+        Storage storage = new Storage();
+        new Thread (new Put(storage)).start();
+        new Thread (new Get(storage)).start();
+
+        // взаимная блокировка
+        final Object obj1 = new Object();
+        final Object obj2 = new Object();
 
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 System.out.println("Thread 1 start");
                 synchronized (obj1) {
+                    try {
+                        Thread.sleep(500); // имитация обработкт данных
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println("Thread 1 locked obj1");
                     synchronized (obj2) {
                         System.out.println("Thread 1 locked both obj");
@@ -151,6 +162,10 @@ class Library{
                 }
             }
         });
+
+        thread1.start();
+        thread2.start();
+
     }
 }
 
