@@ -18,6 +18,8 @@ import java.util.Queue;
 
 public class Pizzeria {
 
+    private List<Thread> listThread = new ArrayList<>();
+
     Queue<DishClient> dishesToCooking = new ArrayDeque<>();
 
     Queue<DishClient> orders = new ArrayDeque<>();
@@ -27,29 +29,56 @@ public class Pizzeria {
     Boolean flagClose = false;
 
 
+    public void start(){
+        for (Thread thread : listThread)
+            thread.start();
+    }
+
     public void close(){
 
         synchronized(flagClose){
             flagClose = true;
         }
 
-        synchronized (orders) {
-            orders.notifyAll();
-        }
+        boolean someoneThere = true;
 
-        synchronized (dishesToCooking) {
-            dishesToCooking.notifyAll();
+        while (someoneThere) {
+
+            synchronized (orders) {
+                orders.notifyAll();
+            }
+
+            synchronized (dishesToCooking) {
+                dishesToCooking.notifyAll();
+            }
+
+            someoneThere = false;
+            for (Thread thread : listThread) {
+                someoneThere |= thread.isAlive();
+            }
+
+            try {
+                Thread.currentThread().sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
 
+    public void addThread(Thread thread){
+        listThread.add(thread);
+    }
+
+
     public static void main(String[] args) {
 
         Pizzeria pizzeria = new Pizzeria();
-        new Thread(new Cooker("Повар1", pizzeria)).start();
-        new Thread(new Cooker("Повар2", pizzeria)).start();
-        new Thread(new Waiter("Официант1", pizzeria)).start();
+        pizzeria.addThread(new Thread(new Cooker("Повар1", pizzeria)));
+        pizzeria.addThread(new Thread(new Cooker("Повар1", pizzeria)));
+        pizzeria.addThread(new Thread(new Cooker("Повар2", pizzeria)));
+        pizzeria.addThread(new Thread(new Waiter("Официант1", pizzeria)));
 
         Client client1 = new Client("Клиент1", pizzeria);
         client1.addDish(new Dish("Блюдо1", 100));
@@ -58,8 +87,10 @@ public class Pizzeria {
         Client client2 = new Client("Клиент2", pizzeria);
         client2.addDish(new Dish("Блюдо1", 100));
 
-        new Thread(client1).start();
-        new Thread(client2).start();
+        pizzeria.addThread(new Thread(client1));
+        pizzeria.addThread(new Thread(client2));
+
+        pizzeria.start();
 
         try {
             Thread.currentThread().sleep(1000);
