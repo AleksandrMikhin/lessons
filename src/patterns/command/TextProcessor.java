@@ -9,7 +9,7 @@ public class TextProcessor {
     private CommandsHistory history = new CommandsHistory();
 
     private ArrayList<String> storage = new ArrayList<>();
-    private String buffer = new String();
+    private StringBuilder buffer = new StringBuilder();
 
     final Command PROCESS = new ProcessCommand(this);
     final Command REPEAT = new RepeatCommand(this);
@@ -24,12 +24,16 @@ public class TextProcessor {
 
 
     public void add() {
-        storage.add(buffer);
-        buffer = "";
+        storage.add(buffer.toString());
+        buffer.setLength(0);
     }
 
     public void addString(String str) {
         storage.add(str);
+    }
+
+    public void delString(int index) {
+        storage.remove(index);
     }
 
     public int lengthBuffer() {
@@ -78,7 +82,8 @@ public class TextProcessor {
                     executeCommand(EXIT);
                     return;
                  default: {
-                     buffer = str;
+                     if (buffer.length() > 0) buffer.append("\n");
+                     buffer.append(str);
                  }
             }
         }

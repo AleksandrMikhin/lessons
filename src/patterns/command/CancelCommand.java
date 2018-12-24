@@ -15,6 +15,8 @@ public class CancelCommand extends Command {
     boolean execute() {
 
         if (processor.lastCommand() != processor.CANCEL) {
+            processor.delString(
+                    processor.sizeStorage() - 1);
             processor.delCommand();
             return true;
         }
