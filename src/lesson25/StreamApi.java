@@ -153,7 +153,7 @@ public class StreamApi {
 // ??       list.stream().filter(a->a%2!=0).collect(Collectors.summingInt()).intValue();
         System.out.println(integer);
 
-        // проверить, есть ли симкол w во всех словах
+        // проверить, есть ли символ w во всех словах
          boolean boo = stringStream1.allMatch(s -> s.contains("w"));
 
 

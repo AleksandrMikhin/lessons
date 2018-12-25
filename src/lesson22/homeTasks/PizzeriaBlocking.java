@@ -16,9 +16,9 @@ public class PizzeriaBlocking {
 
     private List<Thread> listThread = new ArrayList<>();
 
-    BlockingQueue<DishClient> orders = new ArrayBlockingQueue(3, true);
-    BlockingQueue<DishClient> dishesToCooking = new ArrayBlockingQueue(3, true);
-    BlockingQueue<DishClient> closedOrders = new ArrayBlockingQueue(3, true);
+    BlockingQueue<DishClient> orders = new ArrayBlockingQueue<>(3, true);
+    BlockingQueue<DishClient> dishesToCooking = new ArrayBlockingQueue<>(3, true);
+    BlockingQueue<DishClient> closedOrders = new ArrayBlockingQueue<>(3, true);
 
     Integer clientCount = 0;
     boolean flagClose = false;
