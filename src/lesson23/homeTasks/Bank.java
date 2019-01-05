@@ -13,10 +13,7 @@ package lesson23.homeTasks;
 //            amount}
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class Bank {
@@ -29,7 +26,8 @@ public class Bank {
 
     private ExecutorService executorService;
     ConcurrentHashMap<Integer, AccountInf> accountsMap = new ConcurrentHashMap<>();
-    ArrayList<TransferMoney> transfers = new ArrayList<>();
+    Vector<TransferMoney> transfers = new Vector<>();
+
 
     public boolean addAccount(String userName, String accountName, int balance) {
         int userId;
@@ -56,77 +54,64 @@ public class Bank {
 
     }
 
-    public boolean transfer(String userName, String accountSrc, String accountDst, int amount) {
+    public void transfer(String userName, String accountSrc, String accountDst, int amount) {
 
-        boolean res = false;
-        System.out.println("Перевод суммы " + amount + " от клиента " + userName + " с " + accountSrc + " на " + accountDst);
-        if (usersIdMap.get(userName) == null) {
-            System.out.println("Клиент " + userName + " не найден!");
-        } else
-            if (accountsIdMap.get(accountSrc) == null) {
-                System.out.println("Аккаунт " + accountSrc + " не найден!");
-            } else
-                if (accountsIdMap.get(accountDst) == null) {
-                    System.out.println("Аккаунт " + accountDst + " не найден!");
-                } else
-                    if (accountsMap.get(accountsIdMap.get(accountSrc)).userId != usersIdMap.get(userName).intValue()) {
-                        System.out.println("Пользователю " + userName + " не принадлежит аккаунт " + accountSrc);
-                    } else
-                        if (accountSrc.equals(accountDst)) {
-                            System.out.println("Аккаунты не могут быть равны!");
-                        } else
-                            if (!transferSum(accountsIdMap.get(accountSrc), accountsIdMap.get(accountDst), amount )) {
-                                System.out.println("Операция отклонена: на аккаунте " + accountSrc + " недостаточно средств!");
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+
+                StringBuilder res = new StringBuilder("Перевод суммы " + amount + " от клиента " + userName + " с " + accountSrc + " на " + accountDst + ": ");
+
+                if (usersIdMap.get(userName) == null) res.append("Клиент " + userName + " не найден!");
+                else if (accountsIdMap.get(accountSrc) == null) res.append("Аккаунт " + accountSrc + " не найден!");
+                else if (accountsIdMap.get(accountDst) == null) res.append("Аккаунт " + accountDst + " не найден!");
+                else if (accountsMap.get(accountsIdMap.get(accountSrc)).userId != usersIdMap.get(userName).intValue())
+                    res.append("Пользователю " + userName + " не принадлежит аккаунт " + accountSrc);
+                else if (accountSrc.equals(accountDst)) res.append("Аккаунты не могут быть равны!");
+                else {
+                    int src = accountsIdMap.get(accountSrc);
+                    int dst = accountsIdMap.get(accountDst);
+
+                    int accSrc, accDst, amount2;
+                    if (src < dst) {
+                        accSrc = src;
+                        accDst = dst;
+                        amount2 = amount;
+                    } else {
+                        accSrc = dst;
+                        accDst = src;
+                        amount2 = -amount;
+                    }
+
+                    try {
+                        accountsMap.computeIfPresent(accSrc, (key, value) -> {
+                            if (value.balance >= amount2) {
+                                accountsMap.computeIfPresent(accDst, (keyDst, valueDst) ->
+                                        new AccountInf(valueDst.userId, valueDst.balance + amount2));
+
+                                try {
+                                    Thread.sleep(new Random().nextInt(1000));
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                res.append("Ok!");
+                                return new AccountInf(value.userId, value.balance - amount2);
                             } else {
-                                res = true;
-                                System.out.println("Перевод осуществлен.");
+                                res.append("Недостаточно средств!");
+                                throw new TransferDenided(); //недостаточно средств
                             }
-
-        transfers.add(new TransferMoney(new Date(), accountSrc, accountDst, amount, res));
-        System.out.println();
-        return res;
-    }
-
-    public boolean transferSum(int src, int dst, int amount) {
-
-        Future<Boolean> future = executorService.submit(new Callable<Boolean>() {
-            public Boolean call() {
-
-                int accSrc, accDst, amount2;
-                if (src < dst) {
-                    accSrc = src;
-                    accDst = dst;
-                    amount2 = amount;
-                } else {
-                    accSrc = dst;
-                    accDst = src;
-                    amount2 = -amount;
+                        });
+                        transfers.add(new TransferMoney(new Date(), accountSrc, accountDst, amount, true));
+                        System.out.println(res);
+                        return;
+                    } catch (TransferDenided e) {}
                 }
-
-                try {
-                    accountsMap.computeIfPresent(accSrc, (key, value) -> {
-                        if (value.balance >= amount2) {
-                            accountsMap.computeIfPresent(accDst, (keyDst, valueDst) ->
-                                    new AccountInf(valueDst.userId, valueDst.balance + amount2));
-                            return new AccountInf(value.userId, value.balance - amount2);
-                        } else
-                            throw new NotEnoughMoney(); //недостаточно средств
-                    });
-                } catch (NotEnoughMoney e) {
-                    return false;
-                }
-
-            return true;
+                transfers.add(new TransferMoney(new Date(), accountSrc, accountDst, amount, false));
+                System.out.println(res);
             }
         });
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
+
 
     public void start(){
         executorService = new ThreadPoolExecutor(
@@ -137,41 +122,54 @@ public class Bank {
 
     public void stop(){
         executorService.shutdown();
-
+        while (!executorService.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("\n--- List transfers ---");
         for (TransferMoney transfer : transfers) {
             System.out.println(transfer);
         }
+        System.out.println();
     }
 
 
 
     public static void main(String[] args) {
         Bank bank = new Bank();
-        bank.addAccount("User1", "Account1", 125);
-        bank.addAccount("User1", "Account2", 325);
-        bank.addAccount("User2", "Account1", 25);
-        bank.addAccount("User3", "Account3", 25);
+        bank.addAccount("User1", "Account1", 100);
+        bank.addAccount("User1", "Account2", 300);
+        bank.addAccount("User3", "Account3", 50);
+        bank.addAccount("User2", "Account4", 25);
         bank.listAllBalance();
 
         bank.start();
 
         bank.transfer("User1", "Account7", "Account3", 125);
         bank.transfer("User1", "Account1", "Account2", 255);
-        bank.listAllBalance();
-
         bank.transfer("User1", "Account2", "Account3", 125);
+        bank.transfer("User2", "Account4", "Account1", 20);
+
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        bank.listAllBalance();
 
         bank.transfer("User3", "Account3", "Account2", 125);
-        bank.listAllBalance();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         bank.stop();
+        bank.listAllBalance();
+
     }
 
 
@@ -218,4 +216,4 @@ public class Bank {
 }
 
 
-class NotEnoughMoney extends RuntimeException{}
+class TransferDenided extends RuntimeException{}
