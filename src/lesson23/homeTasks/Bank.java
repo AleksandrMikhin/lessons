@@ -56,7 +56,7 @@ public class Bank {
 
     public void transfer(String userName, String accountSrc, String accountDst, int amount) {
 
-        executorService.submit(new Runnable() {
+        executorService.execute(new Runnable() {
             @Override
             public void run() {
 
@@ -213,7 +213,7 @@ public class Bank {
             this.isDone = isDone;
         }
     }
+
+    class TransferDenided extends RuntimeException{}
 }
 
-
-class TransferDenided extends RuntimeException{}

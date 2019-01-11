@@ -17,9 +17,14 @@ public class Port {
     public Port(int maxQueueShips, int dockCount) {
         listShips = new ArrayBlockingQueue(maxQueueShips, true);
         dockPool = Executors.newFixedThreadPool(dockCount);
+        addDock(dockCount);
+    }
+
+    public void addDock(int dockCount) {
         for (int i = 0; i < dockCount; i++)
             dockPool.submit(new DockThread("Dock" + (i+1) ));
     }
+
 
     public void addShipQueue(Ship ship) {
         if (dockPool.isShutdown()) {
