@@ -22,59 +22,9 @@ public class Main {
 
             boxPencil.listPencils();
 
-
-
-
-
-
-
         } catch (IllegalAccessException | ClassNotFoundException | InstantiationException e) {
             e.printStackTrace(); // что-то пошло не так
         }
 
     }
 }
-
-
-////    Например, есть классы в пакете reflection:
-////
-//    interface I {
-//        String getValue();
-//    }
-//
-//    class Imlp implements I {
-//        String getValue() {
-//            return String.valueOf(Math.random());
-//        }
-//    }
-//
-//    class A {
-//        private String str;
-//
-//        @Resource (Impl.class)
-//        private I i;
-//    }
-//
-//    class B {
-//        private int val;
-//
-//        @Resource
-//        private A aVal;
-//
-//        public I getI() {
-//            return aVal.getI();
-//        }
-//    }
-//
-//    И следующий код создаст полноценный объект B, у которого все аннотированные поля будут инициализированы:
-//
-//    public static void main(String[] args) {
-//            DIContext ctx = new DIContext();
-//
-//            B b = ctx.get("reflection.B"); // используйте generics, чтобы не делать cast
-//
-//            String randomString = b.getI().getValue();
-//            I i = ctx.get("reflection.Impl");
-//            }
-//
-//    Используйте свои исключения, которые будут выбрасываться в случае, если невозможно инициализировать объект.
