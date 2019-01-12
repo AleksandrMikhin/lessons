@@ -28,8 +28,7 @@ public class DIContext {
                 continue;
             }
 
-            InjectRandomColor annotation2 = field.getAnnotation(InjectRandomColor.class);
-            if (annotation2 != null) {
+            if (field.isAnnotationPresent(InjectRandomColor.class)) {
                 field.setAccessible(true);
                 Color random = Color.values()[new Random().nextInt(Color.values().length)];
                 field.set(obj, random);
@@ -37,14 +36,6 @@ public class DIContext {
                 continue;
             }
 
-            InjectPencils annotation3 = field.getAnnotation(InjectPencils.class);
-            if (annotation3 != null) {
-                field.setAccessible(true);
-                Color random = Color.values()[new Random().nextInt(Color.values().length)];
-                field.set(obj, random);
-                field.setAccessible(isAccessible);
-                continue;
-            }
         }
 
         return (T) obj;
