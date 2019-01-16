@@ -4,6 +4,9 @@ public class SomeClass {
 
     private static final Logger LOG = Logger.getLogger(SomeClass.class);
     public static void main(String[] args) {
-        System.out.println("hello");
+        LOG.info("Application started");
+        System.out.println("Hello, Maven!");
+        LOG.info("Application stopped");
+
     }
 }
